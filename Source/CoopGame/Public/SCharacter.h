@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "SCharacter.generated.h"
 
+class USHealthComponent;
+
 UCLASS()
 class COOPGAME_API ASCharacter : public ACharacter
 {
@@ -34,10 +36,42 @@ protected:
 	void BeginCrouch();
 	void EndCrouch();
 
+	void BeginZoom();
+	void EndZoom();
+
+	void StartFire();
+	void EndFire();
+
+	UFUNCTION()
+	void OnHealthChanged(USHealthComponent* HealthComp, float Health, float HealthDelta, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
+
+	UPROPERTY(BlueprintReadOnly)
+	bool bDead;
+
+	bool bWantsToZoom;
+
+	float DefaultFOV;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	float ZoomedFOV;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (ClampMin = 0.1, ClampMax = 100.0))
+	float ZoomInterpSpeed;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	class UCameraComponent* CameraComp;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	class USpringArmComponent* SpringArm;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	USHealthComponent* HealthComponent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<class ASWeapon> StarterWeaponClass;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	FName WeaponSocket;
+
+	ASWeapon* CurrentWeapon;
 
 };

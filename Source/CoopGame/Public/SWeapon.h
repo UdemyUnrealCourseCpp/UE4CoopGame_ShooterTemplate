@@ -22,16 +22,51 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class USkeletalMeshComponent* MeshComp;
 
-	UFUNCTION(BlueprintCallable)
-	void Fire();
+	virtual void Fire();
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	void PlayFireEffects(FVector TracerEndPoint);
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<class UDamageType> DamageType;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	FName MuzzleSocket;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	FName TraceBeamSocket;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	float BaseDamage;
+
+	float LastFireTime;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	float RateOffFire;
+
+	float TimeBetweenShots;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	class UParticleSystem* MuzzleParticle;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UParticleSystem* DefaultImpactParticle;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UParticleSystem* FleshImpactParticle;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UParticleSystem* TracerParticle;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<UCameraShake>FireCamShake;
+
+	FTimerHandle TimerHandle_Fire;
+
 public:	
+	void StartFire();
+	void EndFire();
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	
 	
 };
